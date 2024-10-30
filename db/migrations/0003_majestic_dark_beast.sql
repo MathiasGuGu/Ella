@@ -1,0 +1,1 @@
+ALTER TABLE "files" ALTER COLUMN "projectId" SET DATA TYPE uuid;
