@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
+import { withUt } from "uploadthing/tw";
 
-const config: Config = {
+const config: Config = withUt({
   darkMode: ["class"],
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -13,6 +14,9 @@ const config: Config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         text: "#011e2f",
+        purple: {
+            DEFAULT: '#525DF9',
+          },
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
@@ -60,5 +64,5 @@ const config: Config = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-};
+});
 export default config;

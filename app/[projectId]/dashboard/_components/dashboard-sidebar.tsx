@@ -1,42 +1,29 @@
 "use client";
 import { cn } from "@/lib/utils";
 import {
-  ArrowRight,
   CheckCheck,
   ChevronDown,
   Clock,
-  Dot,
   Files,
   GitGraph,
   Home,
   List,
   PencilLine,
+  Plus,
   Settings,
-  Stars,
   User2,
+  Wrench,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-function SidebarProjectCard() {
-  return (
-    <div className="py-4  rounded-xl bg-zinc-50 border border-slate-100 flex items-center justify-between gap-4 relative px-4">
-      <div className="flex flex-col -space-y-1">
-        <p className="text-base font-bold font-serif">Kulien Gartneri</p>
-        <p className="text-sm text-text/80">Utvikling av nettside</p>
-      </div>
-      <div>
-        <ChevronDown size={24} strokeWidth={1.5} />
-      </div>
-    </div>
-  );
-}
 
 type sidebarLink = {
   title: string;
   icon: React.ReactNode;
   href: string;
+  parentHref?: string;
   urlRef: string;
+  subLinks?: sidebarLink[];
 };
 
 const sidebardLinks: sidebarLink[] = [
@@ -69,6 +56,29 @@ const sidebardLinks: sidebarLink[] = [
     icon: <Files strokeWidth={1.5} size={18} />,
     href: "files",
     urlRef: "files",
+    subLinks: [
+      {
+        title: "Upload",
+        icon: <Plus strokeWidth={1.5} size={14} />,
+        href: "upload",
+        parentHref: "files",
+        urlRef: "upload",
+      },
+      {
+        title: "Client",
+        icon: <User2 strokeWidth={1.5} size={14} />,
+        href: "client",
+        parentHref: "files",
+        urlRef: "client",
+      },
+      {
+        title: "Developer",
+        icon: <Wrench strokeWidth={1.5} size={14} />,
+        href: "developer",
+        parentHref: "files",
+        urlRef: "developer",
+      },
+    ],
   },
   {
     title: "Checklist",
@@ -89,58 +99,76 @@ function SidebarLink({
   icon,
   title,
   urlRef,
+  subLinks,
   currentPath,
-}: sidebarLink & any) {
+  parentHref = "",
+}: sidebarLink & { currentPath: string[] }) {
+  // Determine the full href for the link
+  const currentProjectId = currentPath[1];
+  const baseUrl = `/${currentProjectId}/dashboard`; // Adjust this to match the fixed part of your URL structure
+  const isParentLink = subLinks && subLinks.length > 0;
+
+  // Construct full href paths
+  const fullHref = isParentLink
+    ? `${baseUrl}/${href}`
+    : `${baseUrl}/${parentHref}/${href}`;
+
   return (
-    <Link
-      href={href}
-      className={cn({
-        "flex gap-2 group items-center duration-200 font-semibold  pl-3 rounded-xl justify-start w-full py-3 text-text/60 text-sm":
-          true,
-        "font-semibold text-text bg-zinc-100 ": urlRef == currentPath,
-        "hover:bg-zinc-50": urlRef != currentPath,
-      })}
-    >
-      {icon}
-      <p className="">{title}</p>
-      {title !== "Files" && (
-        <div className=" text-xs bg-slate-100 rounded-full px-2  border border-zinc-300 text-text/60">
-          coming soon
+    <>
+      <Link
+        href={fullHref}
+        className={cn({
+          "flex gap-2 group items-center justify-between pr-3 pl-3 rounded-xl w-full py-3 text-text/80 text-sm":
+            true,
+          "font-semibold text-[#525DF9] bg-zinc-50 ":
+            currentPath.includes(urlRef),
+          "hover:bg-zinc-50": !currentPath.includes(urlRef),
+        })}
+      >
+        <div className="flex gap-2 items-center">
+          {icon}
+          <p className="">{title}</p>
+        </div>
+        {subLinks && <ChevronDown size={16} strokeWidth={2} />}
+      </Link>
+      {subLinks && currentPath.includes(urlRef) && (
+        <div className="pl-4 flex flex-col border-l border-[#525DF9]">
+          {subLinks.map((sub: sidebarLink) => (
+            <SidebarLink
+              key={sub.title}
+              {...sub}
+              currentPath={currentPath}
+              parentHref={href} // Pass parent's href to sublinks
+            />
+          ))}
         </div>
       )}
-    </Link>
+    </>
   );
 }
-
 // "flex gap-2 items-center  rounded-xl justify-start px-4 py-3  text-sm font-medium"
 
 export default function Sidebar() {
   // Get the current url
   const currentUrl = usePathname();
   const path = currentUrl.split("/");
-  const currentPath = path[path.length - 1];
+  const currentPath = path;
   return (
-    <div className="h-[calc(100vh-5rem)] border-r border-slate-200 flex-grow max-w-[20%] min-w-[20%] w-[20%] bg-background p-4 text-text">
-      {/* <SidebarProjectCard /> */}
-
-      {/* <div className="w-full h-4 flex items-center justify-center">
-        <div className="w-full h-[1px] bg-zinc-200"></div>
-      </div> */}
-
+    <div className="h-[calc(100vh-5rem)] border-r border-slate-200 flex-grow w-[25%] bg-background p-4 text-text">
       <ul className="flex flex-col items-start justify-between h-full w-full gap-1 ">
-        <div className="w-full">
+        <div className="w-full gap-1 flex flex-col">
           {sidebardLinks.map((link) => (
             <SidebarLink key={link.title} {...link} currentPath={currentPath} />
           ))}
         </div>
         <div className="w-full">
-          <div className="w-full h-32 mb-6 bg-gradient-to-tr from-[#DEE0FC] to-zinc-100 border border-slate-200 text-sm rounded-xl flex flex-col gap-2 items-center justify-center text-text/80">
+          {/* <div className="w-full h-32 mb-6 bg-gradient-to-tr from-[#DEE0FC] to-zinc-100 border border-slate-200 text-sm rounded-xl flex flex-col gap-2 items-center justify-center text-text/80">
             <Stars strokeWidth={1} size={28} />
             <div className="flex flex-col items-center justify-center">
-              <p>Invite clients to your project</p>
+              <p>Invite clients</p>
               <p>Coming soon</p>
             </div>
-          </div>
+          </div> */}
           <SidebarLink
             currentPath={currentPath}
             urlRef="account"

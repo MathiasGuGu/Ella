@@ -2,7 +2,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import {
   Form,
   FormControl,
@@ -13,16 +12,20 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { db } from "@/db";
-import { project } from "@/db/schema";
 import { useSession } from "@/lib/auth-client";
+import { Session } from "@/utils/auth";
+import { ICreateProjectFields } from "@/app/server/product-actions";
 
 const formSchema = z.object({
   projectName: z.string().min(2).max(50),
   projectDescription: z.string().min(2).max(50),
 });
 
-export default function ProjectForm() {
+export default function ProjectForm({
+  callback,
+}: {
+  callback: (values: ICreateProjectFields, session: Session) => Promise<void>;
+}) {
   const { data: session } = useSession();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -39,12 +42,8 @@ export default function ProjectForm() {
       console.log("No session");
       return;
     }
-    await db.insert(project).values({
-      userId: session.user.id!,
-      name: values.projectName,
-      description: values.projectDescription,
-      customerId: session.user.id!,
-    });
+    await callback(values, session);
+
     console.log("Done submitting");
   }
 

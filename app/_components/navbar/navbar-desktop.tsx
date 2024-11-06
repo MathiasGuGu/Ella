@@ -2,7 +2,7 @@
 import { useSession } from "@/lib/auth-client";
 import SignInButton from "../sign-in-button";
 import SignUpButton from "../sign-up-button";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, User2 } from "lucide-react";
 import Image from "next/image";
 
 export default function NavbarDesktop() {
@@ -26,7 +26,9 @@ export default function NavbarDesktop() {
             {data.user.image ? (
               <Image src={data.user.image} alt="user" />
             ) : (
-              <div className="w-10 h-10 rounded-full bg-zinc-500" />
+              <div className="w-10 h-10 items-center justify-center flex rounded-full ">
+                <User2 size={24} strokeWidth={1.5} />
+              </div>
             )}
           </div>
         ) : (

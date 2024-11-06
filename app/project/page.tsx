@@ -1,18 +1,17 @@
-"use client";
 import Link from "next/link";
 import CreateProjectDialog from "./_components/create-project-dialog";
-import { db } from "@/db";
-import { useEffect } from "react";
+import { createProject } from "@/app/server/product-actions";
 
 export default function Project() {
-  async function getAllProjects() {
-    const projects = await db.query.project.findMany();
-    console.log(projects);
-  }
+  // async function getAllProjects() {
+  //   const projects = await db.query.project.findMany();
+  //   console.log(projects);
+  // }
 
-  useEffect(() => {
-    getAllProjects();
-  }, []);
+  // useEffect(() => {
+  //   getAllProjects();
+  // }, []);
+
   return (
     <div className="w-screen h-[calc(100vh-5rem)] flex flex-col gap-4 items-start py-12 text-text px-[5%]">
       <div className="flex flex-col items-start">
@@ -29,7 +28,7 @@ export default function Project() {
       </div>
 
       <section className="w-full h-auto flex gap-4 ">
-        <CreateProjectDialog />
+        <CreateProjectDialog callback={createProject} />
         <Link
           href={"/1/dashboard/overview"}
           className="size-36 border border-slate-200 rounded-xl  flex items-center justify-center"

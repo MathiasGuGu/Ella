@@ -4,14 +4,14 @@ import { SizeIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { Link } from "lucide-react";
 
-export default function FileContainer({ file }: { file: IFile }) {
+export default function FileContainer({ file }: { file: any }) {
   const imageFileType = file.type.split("/");
   return (
     <div className="w-full h-[400px] rounded-xl text-text  overflow-hidden border-slate-200 relative isolate">
       {/* Top Link and function box */}
 
       {/* Info box */}
-      <div className="w-full h-[70%] relative rounded-lg bg-gradient-to-tr from-[#DEE0FC] to-zinc-100 shadow-inner flex items-center justify-center">
+      <div className="w-full h-[70%] relative rounded-xl overflow-hidden bg-gradient-to-tr from-[#DEE0FC] border border-text/10 to-zinc-100 shadow-inner flex items-center justify-center">
         {imageFileType.includes("image") ? (
           <Image
             src={file.url}

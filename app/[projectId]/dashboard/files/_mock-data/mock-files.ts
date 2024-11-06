@@ -40,4 +40,20 @@ export const files: IFile[] = [
     fileRef: "4",
     info: "Designs and flows",
   },
+  {
+    id: "5",
+    url: "https://cdn.dribbble.com/userupload/17310271/file/original-d728331ed8680fa54f985d6127662b3e.png?resize=2048x1536",
+    name: "3.jpeg",
+    type: "image/jpeg",
+    fileRef: "3",
+    info: "Mockup of the front page of the website",
+  },
+  {
+    id: "6",
+    url: "",
+    name: "4.pdf",
+    type: "application/pdf",
+    fileRef: "4",
+    info: "Designs and flows",
+  },
 ];
