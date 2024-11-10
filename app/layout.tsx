@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { generateMetadata } from "../utils/metadata";
-import Navbar from "./_components/navbar/navbar";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import QueryProvider from "./providers/QueryProvider";
 
 const spaceGrotesk = Space_Grotesk({
@@ -28,7 +26,6 @@ export const metadata: Metadata = generateMetadata({
   description: "A tool to generate a project overview.",
 });
 
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -39,12 +36,7 @@ export default function RootLayout({
       <body
         className={`${spaceGrotesk.variable} antialiased font-[family-name:var(--font-title)]`}
       >
-        <header>
-          <Navbar />
-        </header>
-        <QueryProvider>
-        {children}
-        </QueryProvider>
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   );
